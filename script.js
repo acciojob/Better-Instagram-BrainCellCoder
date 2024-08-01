@@ -29,10 +29,9 @@ draggables.forEach(draggable =>{
 
             if(drag == "drop"){
                  const targetElement = e.target // where you want to drop it
-                // console.log("Helllloo")
+                console.log("Helllloo")
                 if(targetElement != draggedElement){
                     // swap the background image
-                    console.log(draggedElement, targetElement)
                     const draggedBackground = draggedElement.id
                     draggedElement.id = targetElement.id
                     targetElement.id = draggedBackground
