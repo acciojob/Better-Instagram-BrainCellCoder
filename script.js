@@ -1,50 +1,57 @@
-document.addEventListener('DOMContentLoaded', () => {
-  const draggables = document.querySelectorAll('.image');
+document.addEventListener("DOMContentLoaded",()=>{
+let draggables = document.querySelectorAll(".image")
+// console.log(draggables)
 
-  draggables.forEach(draggable => {
-    draggable.addEventListener('dragstart', dragStart);
-    draggable.addEventListener('dragover', dragOver);
-    draggable.addEventListener('dragenter', dragEnter);
-    draggable.addEventListener('dragleave', dragLeave);
-    draggable.addEventListener('drop', dragDrop);
-    draggable.addEventListener('dragend', dragEnd);
-  });
+let draggedElement = null // which card/div you have started dragging
+draggables.forEach(draggable =>{
 
-  let dragSrcEl = null;
+    // dragStart, dragEnd
 
-  function dragStart(e) {
-    dragSrcEl = this;
-    e.dataTransfer.effectAllowed = 'move';
-    e.dataTransfer.setData('text/html', this.outerHTML);
-    this.classList.add('selected');
-  }
+    draggable.addEventListener("dragstart",(e)=>{
+         draggedElement = e.target
+        //  e.dataTransfer.setData("text", e.target.id)
+         draggedElement.style.opacity = 0.5
+    })
 
-  function dragOver(e) {
-    e.preventDefault();
-    return false;
-  }
+    draggable.addEventListener("dragend",(e)=>{
+        e.target.style.opacity = 1
+   })
 
-  function dragEnter(e) {
-    this.classList.add('over');
-  }
+   // dragover, dragenter, drop
+   let dragEvents = ["dragover", "dragenter", "drop"]
+//    draggable.addEventListener("dragover", (e)=>{
+//         e.preventDefault()
+//    })
 
-  function dragLeave(e) {
-    this.classList.remove('over');
-  }
+    dragEvents.forEach(drag =>{
+        draggable.addEventListener(drag, (e)=>{
+                e.preventDefault()
 
-  function dragDrop(e) {
-    e.preventDefault();
-    if (dragSrcEl !== this) {
-      dragSrcEl.outerHTML = this.outerHTML;
-      this.outerHTML = e.dataTransfer.getData('text/html');
-    }
-    return false;
-  }
+            if(drag == "drop"){
+                 const targetElement = e.target // where you want to drop it
+                // console.log("Helllloo")
+                if(targetElement != draggedElement){
+                    // swap the background image
+                    console.log(draggedElement, targetElement)
+                    const draggedBackground = draggedElement.id
+                    draggedElement.id = targetElement.id
+                    targetElement.id = draggedBackground
 
-  function dragEnd(e) {
-    draggables.forEach(draggable => {
-      draggable.classList.remove('over');
-      draggable.classList.remove('selected');
-    });
-  }
-});
+                    // swap: 
+
+                    const draggedText = draggedElement.innerText
+                    draggedElement.innerText = targetElement.innerText
+                    targetElement.innerText = draggedText
+
+
+                }
+
+
+
+            }
+        })
+    })
+
+
+})
+})
